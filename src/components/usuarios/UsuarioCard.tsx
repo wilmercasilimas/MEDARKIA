@@ -1,16 +1,15 @@
-// src/components/usuarios/UsuarioCard.tsx
-
 import { getAvatarUrl } from "@/utils/getAvatarUrl";
-import { UserCircle, Pencil, Trash } from "lucide-react";
+import { UserCircle, Pencil, Trash, UserPlus } from "lucide-react";
 import type { Usuario } from "@/types/Usuario";
 
 interface Props {
   usuario: Usuario;
   onEditar: (usuario: Usuario) => void;
   onEliminar: (usuario: Usuario) => void;
+  onAsignarDoctor?: (usuario: Usuario) => void; // ✅ NUEVO
 }
 
-export function UsuarioCard({ usuario, onEditar, onEliminar }: Props) {
+export function UsuarioCard({ usuario, onEditar, onEliminar, onAsignarDoctor }: Props) {
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg shadow p-4 space-y-3 border border-gray-200 dark:border-zinc-700">
       <div className="flex items-center gap-3">
@@ -46,6 +45,15 @@ export function UsuarioCard({ usuario, onEditar, onEliminar }: Props) {
       </div>
 
       <div className="flex justify-end gap-4">
+        {usuario.rol === "asistente" && onAsignarDoctor && (
+          <button
+            onClick={() => onAsignarDoctor(usuario)}
+            className="text-blue-600 hover:text-blue-800"
+            title="Asignar doctor"
+          >
+            <UserPlus size={18} />
+          </button>
+        )}
         <button
           onClick={() => onEditar(usuario)}
           className="text-green-600 hover:text-green-800"

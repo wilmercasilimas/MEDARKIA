@@ -1,8 +1,9 @@
+// src/pages/usuarios/UsuariosPage.tsx
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios, { AxiosError } from "axios";
 import { primaryButton } from "@/styles/buttons";
 import { getAvatarUrl } from "@/utils/getAvatarUrl";
-import { UserCircle, Pencil, Trash } from "lucide-react";
+import { UserCircle, Pencil, Trash, UserPlus } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { CrearUsuarioModal } from "@/components/usuarios/CrearUsuarioModal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -16,6 +17,7 @@ import {
   exportarUsuariosCSV,
   exportarUsuariosPDF,
 } from "@/helpers/exportarUsuarios";
+import { AsignarDoctorModal } from "./components/AsignarDoctorModal";
 
 export default function UsuariosPage() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -38,6 +40,9 @@ export default function UsuariosPage() {
   const [limitePorPagina, setLimitePorPagina] = useState(10);
   const [mostrarOpcionesExportar, setMostrarOpcionesExportar] = useState(false);
   const exportarRef = useRef<HTMLDivElement>(null);
+
+  const [asistenteSeleccionado, setAsistenteSeleccionado] =
+    useState<Usuario | null>(null);
 
   const obtenerUsuarios = useCallback(() => {
     if (!token) return;
@@ -100,6 +105,12 @@ export default function UsuariosPage() {
       document.removeEventListener("mousedown", manejarClickFuera);
     };
   }, []);
+
+  const handleAsignarDoctor = (usuario: Usuario) => {
+    if (usuario.rol === "asistente") {
+      setAsistenteSeleccionado(usuario);
+    }
+  };
 
   if (!user) {
     return (
@@ -188,7 +199,6 @@ export default function UsuariosPage() {
         </p>
       )}
 
-      {/* Tabla para escritorio */}
       <div className="hidden sm:block overflow-x-auto rounded-lg shadow-md">
         <table className="min-w-full bg-white dark:bg-zinc-900 text-sm">
           <thead>
@@ -267,6 +277,15 @@ export default function UsuariosPage() {
                     >
                       <Trash size={16} />
                     </button>
+                    {usuario.rol === "asistente" && (
+                      <button
+                        onClick={() => setAsistenteSeleccionado(usuario)}
+                        className="text-blue-600 hover:text-blue-800"
+                        title="Asignar doctor"
+                      >
+                        <UserPlus size={16} />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
@@ -275,7 +294,6 @@ export default function UsuariosPage() {
         </table>
       </div>
 
-      {/* Tarjetas para móviles */}
       <div className="sm:hidden space-y-4">
         {usuarios.length === 0 ? (
           <p className="text-center text-gray-500 dark:text-gray-400">
@@ -288,12 +306,12 @@ export default function UsuariosPage() {
               usuario={usuario}
               onEditar={setUsuarioEnEdicion}
               onEliminar={setUsuarioAEliminar}
+              onAsignarDoctor={handleAsignarDoctor}
             />
           ))
         )}
       </div>
 
-      {/* Paginación */}
       {usuarios.length > 0 && (
         <Paginacion
           paginaActual={paginaActual}
@@ -315,11 +333,10 @@ export default function UsuariosPage() {
           abierto={!!usuarioEnEdicion}
           onClose={() => setUsuarioEnEdicion(null)}
           onSuccess={() => {
-            setUsuarioEnEdicion(null);
-            setTimeout(() => {
-              obtenerUsuarios();
-            }, 300);
-          }}
+  setUsuarioEnEdicion(null);
+  obtenerUsuarios();
+}}
+
           usuario={usuarioEnEdicion}
         />
       )}
@@ -335,6 +352,18 @@ export default function UsuariosPage() {
         mensaje={`¿Deseas eliminar a ${usuarioAEliminar?.nombre} ${usuarioAEliminar?.apellido}? Esta acción no se puede deshacer.`}
         textoConfirmar="Eliminar"
       />
+
+      {asistenteSeleccionado && (
+        <AsignarDoctorModal
+          abierto={!!asistenteSeleccionado}
+          onClose={() => setAsistenteSeleccionado(null)}
+          onSuccess={() => {
+            setAsistenteSeleccionado(null);
+            obtenerUsuarios();
+          }}
+          asistente={asistenteSeleccionado}
+        />
+      )}
     </div>
   );
 }
