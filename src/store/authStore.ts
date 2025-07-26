@@ -21,10 +21,28 @@ interface AuthState {
   logout: () => void;
 }
 
+const getInitialAuthState = (): Pick<AuthState, "token" | "user"> => {
+  const token = localStorage.getItem("token");
+  const userString = localStorage.getItem("user");
+
+  return {
+    token,
+    user: userString ? JSON.parse(userString) : null,
+  };
+};
+
 export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
-  user: null,
-  login: ({ token, usuario }) => set({ token, user: usuario }),
-  logout: () => set({ token: null, user: null }),
+  ...getInitialAuthState(),
+
+  login: ({ token, usuario }) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(usuario));
+    set({ token, user: usuario });
+  },
+
+  logout: () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    set({ token: null, user: null });
+  },
 }));
-//aa

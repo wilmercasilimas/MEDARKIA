@@ -9,6 +9,6 @@ export const rutaDashboardPorRol = (rol: string): string => {
     case 'paciente':
       return '/dashboard/paciente';
     default:
-      return '/login';
+      return '/';
   }
 };

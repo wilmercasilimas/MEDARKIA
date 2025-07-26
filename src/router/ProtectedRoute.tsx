@@ -4,10 +4,11 @@ import { useAuthStore } from "@/store/authStore";
 export default function ProtectedRoute() {
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
-  const location = useLocation(); // ✅ Aquí se obtiene la ubicación actual
+  const location = useLocation();
 
+  // ✅ Redirige a página pública en lugar de login
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Solo permitir acceso a /usuarios si es admin

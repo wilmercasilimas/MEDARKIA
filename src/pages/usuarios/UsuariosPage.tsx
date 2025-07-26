@@ -333,10 +333,11 @@ export default function UsuariosPage() {
           abierto={!!usuarioEnEdicion}
           onClose={() => setUsuarioEnEdicion(null)}
           onSuccess={() => {
-  setUsuarioEnEdicion(null);
-  obtenerUsuarios();
-}}
-
+            setUsuarioEnEdicion(null);
+            setTimeout(() => {
+              obtenerUsuarios();
+            }, 300);
+          }}
           usuario={usuarioEnEdicion}
         />
       )}

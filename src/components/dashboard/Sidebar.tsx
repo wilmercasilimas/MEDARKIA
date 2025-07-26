@@ -1,10 +1,16 @@
-import { Home, User, Calendar, ClipboardList, LogOut } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import logo from "@/assets/LogoMedarkia.png";
 import { textButton } from "@/styles/buttons";
 import { useState } from "react";
 import { CambiarPasswordModal } from "@/components/usuarios/CambiarPasswordModal";
+
+// Menús dinámicos por rol
+import { menuAdmin } from "@/components/dashboard/menus/menuAdmin";
+import { menuDoctor } from "@/components/dashboard/menus/menuDoctor";
+import { menuAsistente } from "@/components/dashboard/menus/menuAsistente";
+import { menuPaciente } from "@/components/dashboard/menus/menuPaciente";
 
 type SidebarProps = {
   cerrarMenu?: () => void;
@@ -12,7 +18,6 @@ type SidebarProps = {
 
 export default function Sidebar({ cerrarMenu }: SidebarProps) {
   const location = useLocation();
-  const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
   const usuario = useAuthStore((state) => state.user);
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -22,71 +27,48 @@ export default function Sidebar({ cerrarMenu }: SidebarProps) {
   };
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+  logout();
+  window.location.href = "/";
+};
+
+
+  const rol = usuario?.rol;
+  const menu =
+    rol === "admin"
+      ? menuAdmin
+      : rol === "doctor"
+      ? menuDoctor
+      : rol === "asistente"
+      ? menuAsistente
+      : menuPaciente;
 
   return (
     <aside className="w-64 min-h-screen bg-white dark:bg-zinc-950 shadow-md flex flex-col justify-between p-4">
-      {/* Logo solo visible en desktop */}
+      {/* Logo */}
       <div className="hidden md:flex justify-start items-center mb-6">
         <img src={logo} alt="Medarkia" className="h-20 w-auto object-contain" />
       </div>
 
-      {/* Menú lateral (siempre debajo del logo) */}
+      {/* Menú dinámico por rol */}
       <nav className="flex flex-col gap-3">
-        <Link
-          to="/dashboard"
-          className={`flex items-center gap-2 ${
-            location.pathname === "/dashboard"
-              ? "text-primary font-semibold"
-              : "text-gray-700 dark:text-gray-200"
-          } hover:text-primary`}
-          onClick={handleClick}
-        >
-          <Home size={20} /> Inicio
-        </Link>
-
-        {usuario?.rol === "admin" && (
+        {menu.map(({ label, to, icon: Icon }) => (
           <Link
-            to="/usuarios"
+            key={to}
+            to={to}
             className={`flex items-center gap-2 ${
-              location.pathname === "/usuarios"
+              location.pathname === to
                 ? "text-primary font-semibold"
                 : "text-gray-700 dark:text-gray-200"
             } hover:text-primary`}
             onClick={handleClick}
           >
-            <User size={20} /> Usuarios
+            <Icon size={20} />
+            {label}
           </Link>
-        )}
-
-        <Link
-          to="/citas"
-          className={`flex items-center gap-2 ${
-            location.pathname === "/citas"
-              ? "text-primary font-semibold"
-              : "text-gray-700 dark:text-gray-200"
-          } hover:text-primary`}
-          onClick={handleClick}
-        >
-          <Calendar size={20} /> Citas
-        </Link>
-
-        <Link
-          to="/historial"
-          className={`flex items-center gap-2 ${
-            location.pathname === "/historial"
-              ? "text-primary font-semibold"
-              : "text-gray-700 dark:text-gray-200"
-          } hover:text-primary`}
-          onClick={handleClick}
-        >
-          <ClipboardList size={20} /> Historial
-        </Link>
+        ))}
       </nav>
 
-      {/* Pie del sidebar */}
+      {/* Footer */}
       <div className="flex flex-col items-center gap-2 mt-6">
         <button
           onClick={() => setModalAbierto(true)}
