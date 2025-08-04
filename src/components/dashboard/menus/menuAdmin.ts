@@ -18,47 +18,47 @@ export const menuAdmin = [
   },
   {
     label: "Usuarios",
-    to: "/usuarios",
+    to: "/admin/usuarios",
     icon: User,
   },
   {
     label: "Doctores",
-    to: "/doctores",
+    to: "/admin/doctores",
     icon: Stethoscope,
   },
   {
     label: "Pacientes",
-    to: "/pacientes",
+    to: "/admin/pacientes",
     icon: Users,
   },
   {
     label: "Citas",
-    to: "/citas",
+    to: "admin/citas",
     icon: Calendar,
   },
   {
     label: "Historial",
-    to: "/historial",
+    to: "/admin/historial",
     icon: FileText,
   },
   {
     label: "Recetas",
-    to: "/recetas",
+    to: "/admin/recetas",
     icon: FilePlus,
   },
   {
     label: "Archivos",
-    to: "/archivos",
+    to: "/admin/archivos",
     icon: Folder,
   },
   {
     label: "Bloqueos",
-    to: "/bloqueos",
+    to: "/admin/bloqueos",
     icon: Calendar,
   },
   {
     label: "Auditoría",
-    to: "/auditoria",
+    to: "/admin/auditoria",
     icon: ShieldCheck,
   },
 ];

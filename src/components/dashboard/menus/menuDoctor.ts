@@ -14,23 +14,23 @@ export const menuDoctor = [
     icon: LayoutDashboard,
   },
   {
-    label: "Citas",
-    to: "/citas",
+    label: "Mis Citas",
+    to: "/doctor/citas", // ✅ Ruta absoluta correcta
     icon: Calendar,
   },
   {
     label: "Historial",
-    to: "/historial",
+    to: "/doctor/historial", // ✅
     icon: FileText,
   },
   {
     label: "Recetas",
-    to: "/recetas",
+    to: "/doctor/recetas", // ✅
     icon: FilePlus,
   },
   {
     label: "Bloqueos",
-    to: "/bloqueos",
+    to: "/doctor/bloqueos", // ✅
     icon: CalendarX,
   },
 ];

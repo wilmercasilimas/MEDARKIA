@@ -13,12 +13,12 @@ export const menuAsistente = [
   },
   {
     label: "Pacientes",
-    to: "/pacientes",
+    to: "/asistente/pacientes", // ✅ corregido
     icon: Users,
   },
   {
-    label: "Citas",
-    to: "/citas",
+    label: "Citas Asistidas",
+    to: "/asistente/citas", // ✅ corregido
     icon: Calendar,
   },
 ];

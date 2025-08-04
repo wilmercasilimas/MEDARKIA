@@ -15,22 +15,22 @@ export const menuPaciente = [
   },
   {
     label: "Historial",
-    to: "/historial",
+    to: "/paciente/historial", // ✅
     icon: FileText,
   },
   {
     label: "Recetas",
-    to: "/recetas",
+    to: "/paciente/recetas", // ✅
     icon: FilePlus,
   },
   {
     label: "Archivos",
-    to: "/archivos",
+    to: "/paciente/archivos", // ✅
     icon: Folder,
   },
   {
-    label: "Citas",
-    to: "/citas",
+    label: "Mis Citas",
+    to: "/paciente/citas", // ✅
     icon: Calendar,
   },
 ];

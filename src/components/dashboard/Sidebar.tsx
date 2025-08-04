@@ -22,6 +22,9 @@ export default function Sidebar({ cerrarMenu }: SidebarProps) {
   const usuario = useAuthStore((state) => state.user);
   const [modalAbierto, setModalAbierto] = useState(false);
 
+  // Mostrar feedback si aún no está cargado el usuario
+if (!usuario) return <div className="p-6 text-sm">Cargando menú...</div>;
+
   const handleClick = () => {
     if (cerrarMenu) cerrarMenu();
   };
@@ -33,14 +36,16 @@ export default function Sidebar({ cerrarMenu }: SidebarProps) {
 
 
   const rol = usuario?.rol;
-  const menu =
-    rol === "admin"
-      ? menuAdmin
-      : rol === "doctor"
-      ? menuDoctor
-      : rol === "asistente"
-      ? menuAsistente
-      : menuPaciente;
+  const menu = (() => {
+  switch (rol) {
+    case "admin": return menuAdmin;
+    case "doctor": return menuDoctor;
+    case "asistente": return menuAsistente;
+    case "paciente": return menuPaciente;
+    default: return [];
+  }
+})();
+
 
   return (
     <aside className="w-64 min-h-screen bg-white dark:bg-zinc-950 shadow-md flex flex-col justify-between p-4">

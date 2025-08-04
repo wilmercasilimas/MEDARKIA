@@ -39,3 +39,6 @@ export const textButton = `
   text-green-600 hover:underline
   text-sm font-medium
 `;
+
+export const dangerButton = "bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm";
+
